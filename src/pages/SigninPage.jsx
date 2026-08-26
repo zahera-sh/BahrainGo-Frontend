@@ -20,10 +20,6 @@ const SignInForm = ({ }) => {
 
     async function handleSubmit(event) {
         event.preventDefault();
-    }
-
-    async function handleSubmit(event) {
-        event.preventDefault();
 
         try {
             const signedInUser = await signIn(formData);
@@ -40,11 +36,14 @@ const SignInForm = ({ }) => {
 
     return (
         <main>
-            <h1>Sign In</h1>
+            <title>Login</title>
+
+            <h1>Welcome Back</h1>
+            <p>Login and see what you missed!</p>
             <p className="error">{error}</p>
             <form autoComplete="off" onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">Username:</label>
+                    <label htmlFor="username">Username:</label>
                     <input
                         type="text"
                         autoComplete="off"
