@@ -11,8 +11,14 @@ async function getPublicChallenges() {
     return response.data
 }
 
+async function getChallengeById(id) {
+    const response = await api.get(`challenges/${id}`);
+    return response.data
+}
+
 
 export {
     createChallenge,
     getPublicChallenges,
+    getChallengeById,
 }

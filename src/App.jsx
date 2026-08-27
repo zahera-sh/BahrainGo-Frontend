@@ -13,6 +13,7 @@ import SignInPage from "./pages/SigninPage";
 import Dashboard from "./pages/Dashboard";
 import CreateChallengePage from "./pages/challenge/CreateChallengePage";
 import PublicChallengePage from "./pages/challenge/PublicChallengePage";
+import ChallengeDetailsPage from "./pages/challenge/ChallengeDetailsPage";
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
 
                 <Route path="/challenges/create" element={<ProtectedRoute><CreateChallengePage /></ProtectedRoute>} />
                 <Route path="/challenges" element={<PublicChallengePage />} />
+                <Route path="/challenges/:id" element={<ProtectedRoute><ChallengeDetailsPage /></ProtectedRoute>} />
+
             </Routes>
         </div>
     );

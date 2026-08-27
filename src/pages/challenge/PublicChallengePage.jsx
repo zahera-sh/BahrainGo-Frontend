@@ -56,11 +56,13 @@ function PublicChallengePage() {
                 <div key={PChallenge._id}>
                     <h3>{PChallenge.description}</h3>
                     <p>{PChallenge.type}</p>
+                    <Link to={`/challenges/${PChallenge._id}`}>Learn More</Link>
                 </div>
             ))}
 
         </main>
     );
+    
 }
 
 
