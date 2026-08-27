@@ -6,6 +6,8 @@ import { useAuth } from "../context/AuthContext";
 
 const SignInForm = ({ }) => {
 
+    document.title = `Login`;
+
     const { setUser } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -36,8 +38,6 @@ const SignInForm = ({ }) => {
 
     return (
         <main>
-            <title>Login</title>
-
             <h1>Welcome Back</h1>
             <p>Login and see what you missed!</p>
             <p className="error">{error}</p>

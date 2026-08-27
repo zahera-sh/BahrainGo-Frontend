@@ -1,14 +1,17 @@
-import { useState } from "react";
 import { Route, Routes } from "react-router";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useAuth } from "./context/AuthContext";
+import { getCurrentUser, logout } from "./services/authService";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
-import SignupPage from "./pages/SignupPage";
+
 import Homepage from "./pages/Homepage";
+import SignupPage from "./pages/SignupPage";
 import SignInPage from "./pages/SigninPage";
 import Dashboard from "./pages/Dashboard";
-import { useEffect } from "react";
-import { getCurrentUser, logout } from "./services/authService";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { useAuth } from "./context/AuthContext";
+import CreateChallengePage from "./pages/challenge/CreateChallengePage";
 
 
 function App() {
@@ -21,6 +24,8 @@ function App() {
                 <Route path="/sign-up" element={<SignupPage />} />
                 <Route path="/sign-in" element={<SignInPage />} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+                <Route path="/challenges/create" element={<ProtectedRoute><CreateChallengePage /></ProtectedRoute>} />
             </Routes>
         </div>
     );

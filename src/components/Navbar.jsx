@@ -1,5 +1,5 @@
-import { Link } from "react-router"
-import { useAuth } from "../context/AuthContext"
+import { Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 
 function Navbar() {
@@ -9,11 +9,12 @@ function Navbar() {
     return (
         <nav>
             {user
-                ?
-                (<>
+                ?(<>
                     <button onClick={logout}>Sign Out</button>
-                </>) :
-                (<>
+                    <Link to="/challenges/create">Create Challenge</Link>
+                </>)
+
+                :(<>
                     <Link to="/sign-up">Register</Link>
                     <Link to="/sign-in">Login</Link>
                 </>)}

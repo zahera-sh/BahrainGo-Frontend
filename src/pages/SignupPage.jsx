@@ -5,6 +5,8 @@ import { signUp } from "../services/authService";
 
 function Signup() {
 
+    document.title = `Register`;
+
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
@@ -44,8 +46,6 @@ function Signup() {
 
     return (
         <main>
-            <title>Register</title>
-
             <p>Don't have an account yet?</p>
             <h1>Register Now</h1>
             <p className="error">{error}</p>
