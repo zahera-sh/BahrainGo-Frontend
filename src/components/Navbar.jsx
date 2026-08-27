@@ -8,16 +8,20 @@ function Navbar() {
 
     return (
         <nav>
+
+            <Link to="/challenges">Challenges</Link>
+
             {user
-                ?(<>
-                    <button onClick={logout}>Sign Out</button>
+                ? (<>
                     <Link to="/challenges/create">Create Challenge</Link>
+                    <button onClick={logout}>Sign Out</button>
                 </>)
 
-                :(<>
+                : (<>
                     <Link to="/sign-up">Register</Link>
                     <Link to="/sign-in">Login</Link>
                 </>)}
+
         </nav>
     );
 }

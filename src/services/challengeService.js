@@ -6,7 +6,13 @@ async function createChallenge(body) {
     return response.data
 }
 
+async function getPublicChallenges() {
+    const response = await api.get("/challenges");
+    return response.data
+}
+
 
 export {
     createChallenge,
+    getPublicChallenges,
 }

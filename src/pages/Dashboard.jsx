@@ -1,4 +1,4 @@
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 
 
 function Dashboard({ }) {
@@ -7,9 +7,11 @@ function Dashboard({ }) {
 
     
     return (
-        <div>
+        <main>
+
             <h1>Welcome {user.username}</h1>
-        </div>
+            
+        </main>
     );
 
 }
