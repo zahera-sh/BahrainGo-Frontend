@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { getChallengeById } from "../../services/challengeService";
+import { createInvite } from "../../services/inviteSrvice";
 
 
 function ChallengeDetailsPage() {
@@ -9,6 +10,8 @@ function ChallengeDetailsPage() {
     document.title = `Challenges`
 
     const [challenge, setChallenge] = useState(null);
+    const [invitee, setInvitee] = useState("");
+    const [showInvite, setShowInvite] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
@@ -38,6 +41,24 @@ function ChallengeDetailsPage() {
         loadChallenge();
 
     }, []);
+
+    async function handleInvite() {
+
+        try {
+            await createInvite({
+                invitee,
+                challenge: challenge._id
+            });
+
+            setInvitee("");
+            setShowInvite(false);
+        }
+
+        catch (err) {
+            console.error("Failed to send invite", err);
+        }
+
+    }
 
 
     return (
@@ -87,6 +108,25 @@ function ChallengeDetailsPage() {
                             ? challenge.creator.role
                             : `${challenge.creator.points}xp`}]
                     </p>
+
+
+                    {challenge.creator.username === user.username && (
+                        <div>
+                            <button onClick={() => setShowInvite(!showInvite)}>Invite</button>
+
+                            {showInvite && (
+                                <div>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter user ID"
+                                        value={invitee}
+                                        onChange={(event) => setInvitee(event.target.value)}
+                                    />
+                                    <button onClick={handleInvite}>Send</button>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                 </>)
 
