@@ -84,7 +84,7 @@ function CreateChallengePage() {
                         onChange={handleChange}
                         value={formData.description}
                         required
-                        minLength={30}
+                        minLength={10}
                     />
                 </div>
 

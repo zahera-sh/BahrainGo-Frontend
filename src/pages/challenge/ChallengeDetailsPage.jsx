@@ -45,8 +45,27 @@ function ChallengeDetailsPage() {
 
             {challenge
                 ? (<>
+                    <p>{challenge.isPublic == true
+                        ? " Public Challenge"
+                        : " Private Challenge"}</p>
+
+                    <p>{challenge.status}</p>
                     <h2>{challenge.description}</h2>
                     <p>{challenge.type}</p>
+
+                    <p>Goal:
+                        {challenge.isMeasurable == true
+                            ? ` ${challenge.goal}`
+                            : " Complete Challenge"}
+                    </p>
+
+                    <p>Reward: {challenge.reward}xp</p>
+
+                    <p>{challenge.creator.role == "business"
+                        ? `Extra Reward: ${challenge.businessReward}`
+                        : " "}
+                    </p>
+
                     <p>Start: {new Date(challenge.startTime).toLocaleString("en-GB", {
                         day: "numeric",
                         month: "long",
@@ -54,6 +73,7 @@ function ChallengeDetailsPage() {
                         hour: "numeric",
                         minute: "2-digit"
                     })}</p>
+
                     <p>End: {new Date(challenge.endTime).toLocaleString("en-GB", {
                         day: "numeric",
                         month: "long",
