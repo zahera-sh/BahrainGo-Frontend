@@ -11,7 +11,7 @@ function CreateChallengePage() {
     const [formData, setFormData] = useState({
         type: "",
         description: "",
-        photo: "",
+        // photo: "",
         isMeasurable: false,
         goal: 1,
         startTime: "",
@@ -88,7 +88,7 @@ function CreateChallengePage() {
                     />
                 </div>
 
-                <div className="createChallengeInput">
+                {/* <div className="createChallengeInput">
                     <label htmlFor="photo">Image:</label>
                     <input
                         type="text"
@@ -97,7 +97,7 @@ function CreateChallengePage() {
                         onChange={handleChange}
                         value={formData.photo}
                     />
-                </div>
+                </div> */}
 
                 <div className="createChallengeInput">
                     <label htmlFor="isMeasurable">Measurable</label>

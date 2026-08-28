@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateChallengePage from "./pages/challenge/CreateChallengePage";
 import PublicChallengePage from "./pages/challenge/PublicChallengePage";
 import ChallengeDetailsPage from "./pages/challenge/ChallengeDetailsPage";
+import MyChallengesPage from "./pages/challenge/MyChallengesPage";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/challenges/create" element={<ProtectedRoute><CreateChallengePage /></ProtectedRoute>} />
                 <Route path="/challenges" element={<PublicChallengePage />} />
                 <Route path="/challenges/:id" element={<ProtectedRoute><ChallengeDetailsPage /></ProtectedRoute>} />
+                <Route path="/challenges/my-challenges" element={<ProtectedRoute><MyChallengesPage /></ProtectedRoute>} />
 
             </Routes>
         </div>

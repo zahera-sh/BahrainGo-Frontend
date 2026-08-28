@@ -16,9 +16,15 @@ async function getChallengeById(id) {
     return response.data
 }
 
+async function getMyChallenges() {
+    const response = await api.get("/challenges/my-challenges");
+    return response.data
+}
+
 
 export {
     createChallenge,
     getPublicChallenges,
     getChallengeById,
+    getMyChallenges,
 }

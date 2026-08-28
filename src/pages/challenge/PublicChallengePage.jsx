@@ -56,13 +56,17 @@ function PublicChallengePage() {
                 <div key={PChallenge._id}>
                     <h3>{PChallenge.description}</h3>
                     <p>{PChallenge.type}</p>
+
+                    {PChallenge.creator.role == "business" && (
+                        <p>Challenged by: {PChallenge.creator.username}</p>)}
+
                     <Link to={`/challenges/${PChallenge._id}`}>Learn More</Link>
                 </div>
             ))}
 
         </main>
     );
-    
+
 }
 
 

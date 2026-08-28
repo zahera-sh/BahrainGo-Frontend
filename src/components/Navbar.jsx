@@ -14,6 +14,7 @@ function Navbar() {
             {user
                 ? (<>
                     <Link to="/challenges/create">Create Challenge</Link>
+                    <Link to="/dashboard">Dashboard</Link>
                     <button onClick={logout}>Sign Out</button>
                 </>)
 
