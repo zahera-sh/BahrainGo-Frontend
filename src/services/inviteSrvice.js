@@ -11,8 +11,26 @@ async function getMyInvites() {
     return response.data
 }
 
+async function acceptInvite(id) {
+    const response = await api.put(`/invites/${id}/accept`)
+    return response.data
+}
+
+async function rejectInvite(id) {
+    const response = await api.put(`/invites/${id}/reject`)
+    return response.data
+}
+
+async function dropChallenge(id) {
+    const response = await api.put(`/invites/${id}/drop`)
+    return response.data
+}
+
 
 export {
     createInvite,
-    getMyInvites
+    getMyInvites,
+    acceptInvite,
+    rejectInvite,
+    dropChallenge
 }
