@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { getChallengeById } from "../../services/challengeService";
 import { createInvite } from "../../services/inviteSrvice";
+import { getParticipants } from "../../services/participantService";
 
 
 function ChallengeDetailsPage() {
@@ -12,6 +13,7 @@ function ChallengeDetailsPage() {
     const [challenge, setChallenge] = useState(null);
     const [invitee, setInvitee] = useState("");
     const [showInvite, setShowInvite] = useState(false);
+    const [participants, setParticipants] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
@@ -38,9 +40,28 @@ function ChallengeDetailsPage() {
 
         }
 
-        loadChallenge();
+        async function loadParticipants() {
 
-    }, []);
+            try {
+                const response = await getParticipants(id);
+                setParticipants(response);
+            }
+
+            catch (err) {
+                console.error("Failed to load Participants", err);
+                setError("Failed to load Participants. Please try again shortly.");
+            }
+
+            finally {
+                setLoading(false);
+            }
+
+        }
+
+        loadChallenge();
+        loadParticipants();
+
+    }, [id]);
 
     async function handleInvite() {
 
@@ -112,7 +133,7 @@ function ChallengeDetailsPage() {
 
                     {challenge.creator.username === user.username && (
                         <div>
-                            <button onClick={() => setShowInvite(!showInvite)}>Invite</button>
+                            <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
 
                             {showInvite && (
                                 <div>
@@ -127,6 +148,24 @@ function ChallengeDetailsPage() {
                             )}
                         </div>
                     )}
+
+                    <p>Current Participants:</p>
+                    {participants.map((participant) => (
+                        <div key={participant._id}>
+                            <h3>{participant.userId.username}</h3>
+
+                            {participant.isComplete
+                                ? <p>✅ Completed {new Date(participant.completeAt).toLocaleString("en-GB", {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                    hour: "numeric",
+                                    minute: "2-digit"
+                                })}</p>
+                                : <p>Progress: {participant.progress}</p>
+                            }
+                        </div>
+                    ))}
 
                 </>)
 

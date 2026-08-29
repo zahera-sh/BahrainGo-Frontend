@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router";
 import { getMyInvites, acceptInvite, rejectInvite } from "../../services/inviteSrvice";
 
 
@@ -90,6 +91,8 @@ function MyInvitesPage() {
                             month: "long",
                             year: "numeric",
                         })}</p>
+
+                        <Link to={`/challenges/${invite.challenge._id}`}>View Challenge</Link>
 
                         {invite.isAccepted
                             ? <p>✅ Accepted</p>
