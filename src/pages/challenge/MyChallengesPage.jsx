@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { getMyChallenges } from "../../services/challengeService";
+import { getMyParticipants } from "../../services/participantService";
 
 
 function MyChallengesPage() {
@@ -9,6 +10,7 @@ function MyChallengesPage() {
     document.title = `My Challenges`
 
     const [myChallenges, setMyChallenges] = useState([]);
+    const [myParticipants, setMyParticipants] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user } = useAuth();
@@ -34,7 +36,22 @@ function MyChallengesPage() {
 
         }
 
+        async function loadMyParticipants() {
+
+            try {
+                const response = await getMyParticipants();
+                setMyParticipants(response);
+            }
+
+            catch (err) {
+                console.error("Failed to load participants", err);
+                setError("Failed to load participants. Please try again shortly.");
+            }
+
+        }
+
         loadMyChallenges();
+        loadMyParticipants();
 
     }, []);
 
@@ -48,18 +65,34 @@ function MyChallengesPage() {
 
 
     return (
-        <main className="myChallengesPage">
+        <main>
 
-            <h1>Challenges By Me</h1>
+            <div className="myChallenges">
+                <h1>Challenges By Me</h1>
 
-            {myChallenges.map((challenge) => (
-                <div key={challenge._id}>
-                    <h3>{challenge.description}</h3>
-                    <p>{challenge.type}</p>
+                {myChallenges.map((challenge) => (
+                    <div key={challenge._id}>
+                        <h3>{challenge.description}</h3>
+                        <p>{challenge.type}</p>
 
-                    <Link to={`/challenges/${challenge._id}`}>View Challenge</Link>
-                </div>
-            ))}
+                        <Link to={`/challenges/${challenge._id}`}>View Challenge</Link>
+                    </div>
+                ))}
+            </div>
+
+            <div className="myParticipants">
+                <h1>Challenges Joined</h1>
+
+                {myParticipants.map((participants) => (
+                    <div key={participants._id}>
+                        <h3>{participants.challengeId.description}</h3>
+                        <p>{participants.challengeId.type}</p>
+                        <p>{participants.challengeId.creator}</p>
+
+                        <Link to={`/challenges/${participants.challengeId._id}`}>View Challenge</Link>
+                    </div>
+                ))}
+            </div>
 
         </main>
     );
