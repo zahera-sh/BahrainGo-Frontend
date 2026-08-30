@@ -92,7 +92,7 @@ function MyInvitesPage() {
                             year: "numeric",
                         })}</p>
 
-                        <Link to={`/challenges/${invite.challenge._id}`}>View Challenge</Link>
+                        <Link to={`/challenges/${invite.challenge._id}`}>➡️</Link>
 
                         {invite.isAccepted
                             ? <p>✅ Accepted</p>

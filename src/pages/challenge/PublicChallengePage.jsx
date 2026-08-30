@@ -60,7 +60,7 @@ function PublicChallengePage() {
                     {PChallenge.creator.role == "business" && (
                         <p>Challenged by: {PChallenge.creator.username}</p>)}
 
-                    <Link to={`/challenges/${PChallenge._id}`}>Learn More</Link>
+                    <Link to={`/challenges/${PChallenge._id}`}>➡️</Link>
                 </div>
             ))}
 

@@ -75,7 +75,7 @@ function MyChallengesPage() {
                         <h3>{challenge.description}</h3>
                         <p>{challenge.type}</p>
 
-                        <Link to={`/challenges/${challenge._id}`}>View Challenge</Link>
+                        <Link to={`/challenges/${challenge._id}`}>➡️</Link>
                     </div>
                 ))}
             </div>
@@ -89,9 +89,9 @@ function MyChallengesPage() {
                             <div key={participants._id}>
                                 <h3>{participants.challengeId.description}</h3>
                                 <p>{participants.challengeId.type}</p>
-                                <p>{participants.challengeId.creator.username}</p>
+                                <p>Creator: {participants.challengeId.creator.username}</p>
 
-                                <Link to={`/challenges/${participants.challengeId._id}`}>View Challenge</Link>
+                                <Link to={`/challenges/${participants.challengeId._id}`}>➡️</Link>
                             </div>
                         )
                     }

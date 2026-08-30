@@ -11,8 +11,14 @@ async function getParticipants(id) {
     return response.data;
 }
 
+async function updateProgress(id, body) {
+    const response = await api.put(`/participants/${id}`, body)
+    return response.data
+}
+
 
 export {
     getMyParticipants,
     getParticipants,
+    updateProgress
 }

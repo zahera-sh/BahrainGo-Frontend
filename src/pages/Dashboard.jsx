@@ -14,8 +14,8 @@ function Dashboard({ }) {
 
             <h1>Welcome {user.username}</h1>
 
-            <Link to={`/challenges/my`}>See My Challenges</Link>
-            <Link to={`/invites/my`}>See My Invitations</Link>
+            <Link to={`/challenges/my`}>See My Challenges →</Link>
+            <Link to={`/invites/my`}>See My Invitations →</Link>
 
         </main>
     );

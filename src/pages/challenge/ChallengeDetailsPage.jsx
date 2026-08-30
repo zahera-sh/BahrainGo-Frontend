@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { getChallengeById } from "../../services/challengeService";
 import { createInvite } from "../../services/inviteSrvice";
-import { getParticipants } from "../../services/participantService";
+import { getParticipants, updateProgress } from "../../services/participantService";
 
 
 function ChallengeDetailsPage() {
@@ -18,6 +18,7 @@ function ChallengeDetailsPage() {
     const [error, setError] = useState(null);
     const { id } = useParams();
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -79,6 +80,18 @@ function ChallengeDetailsPage() {
             console.error("Failed to send invite", err);
         }
 
+    }
+
+    async function handleUpdateProgress(participant) {
+
+        const newProgress = participant.progress + 1;
+
+        await updateProgress(id, {
+            progress: newProgress
+        });
+
+        const response = await getParticipants(id);
+        setParticipants(response);
     }
 
 
@@ -155,14 +168,27 @@ function ChallengeDetailsPage() {
                             <h3>{participant.userId.username}</h3>
 
                             {participant.isComplete
-                                ? <p>✅ Completed {new Date(participant.completeAt).toLocaleString("en-GB", {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                    hour: "numeric",
-                                    minute: "2-digit"
-                                })}</p>
-                                : <p>Progress: {participant.progress}</p>
+                                ? (
+                                    <p>
+                                        ✅ Completed at{" "}
+                                        {new Date(participant.completeAt).toLocaleString("en-GB", {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                            hour: "numeric",
+                                            minute: "2-digit"
+                                        })}
+                                    </p>
+                                )
+                                : (
+                                    <div>
+                                        <p>Progress: {participant.progress}</p>
+
+                                        {participant.userId._id === user._id && (
+                                            <button onClick={() => handleUpdateProgress(participant)}>➕</button>
+                                        )}
+                                    </div>
+                                )
                             }
                         </div>
                     ))}
