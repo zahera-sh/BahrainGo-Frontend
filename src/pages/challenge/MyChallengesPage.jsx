@@ -83,15 +83,19 @@ function MyChallengesPage() {
             <div className="myParticipants">
                 <h1>Challenges Joined</h1>
 
-                {myParticipants.map((participants) => (
-                    <div key={participants._id}>
-                        <h3>{participants.challengeId.description}</h3>
-                        <p>{participants.challengeId.type}</p>
-                        <p>{participants.challengeId.creator}</p>
+                {myParticipants.map((participants) => {
+                    if (participants.challengeId.creator._id !== user._id) {
+                        return (
+                            <div key={participants._id}>
+                                <h3>{participants.challengeId.description}</h3>
+                                <p>{participants.challengeId.type}</p>
+                                <p>{participants.challengeId.creator.username}</p>
 
-                        <Link to={`/challenges/${participants.challengeId._id}`}>View Challenge</Link>
-                    </div>
-                ))}
+                                <Link to={`/challenges/${participants.challengeId._id}`}>View Challenge</Link>
+                            </div>
+                        )
+                    }
+                })}
             </div>
 
         </main>
