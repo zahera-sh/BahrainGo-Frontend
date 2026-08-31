@@ -16,6 +16,7 @@ import PublicChallengePage from "./pages/challenge/PublicChallengePage";
 import ChallengeDetailsPage from "./pages/challenge/ChallengeDetailsPage";
 import MyChallengesPage from "./pages/challenge/MyChallengesPage";
 import MyInvitesPage from "./pages/invites/MyInvitesPage";
+import NotFoundPage from "./pages/more/NotFoundPage";
 
 
 function App() {
@@ -34,6 +35,8 @@ function App() {
                 <Route path="/challenges/:id" element={<ProtectedRoute><ChallengeDetailsPage /></ProtectedRoute>} />
                 <Route path="/challenges/my" element={<ProtectedRoute><MyChallengesPage /></ProtectedRoute>} />
                 <Route path="/invites/my" element={<ProtectedRoute><MyInvitesPage /></ProtectedRoute>} />
+
+                <Route path="*" element={<NotFoundPage />} />
 
             </Routes>
         </div>
