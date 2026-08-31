@@ -3,12 +3,12 @@ import { Link, useParams, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { getChallengeById } from "../../services/challengeService";
 import { createInvite } from "../../services/inviteSrvice";
-import { getParticipants, updateProgress } from "../../services/participantService";
+import { getParticipants, joinChallenge, updateProgress } from "../../services/participantService";
 
 
 function ChallengeDetailsPage() {
 
-    document.title = `Challenges`
+    document.title = `Challenges`;
 
     const [challenge, setChallenge] = useState(null);
     const [invitee, setInvitee] = useState("");
@@ -19,6 +19,10 @@ function ChallengeDetailsPage() {
     const { id } = useParams();
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    const isParticipant = participants.some(
+        (participant) => participant.userId._id === user._id
+    );
 
     useEffect(() => {
 
@@ -32,7 +36,7 @@ function ChallengeDetailsPage() {
 
             catch (err) {
                 console.error("Failed to load challenge", err);
-                setError("Failed to load challenge. Please try again shortly.");
+                setError(err.response?.data?.message || "Failed to load challenge. Please try again shortly.");
             }
 
             finally {
@@ -50,7 +54,7 @@ function ChallengeDetailsPage() {
 
             catch (err) {
                 console.error("Failed to load Participants", err);
-                setError("Failed to load Participants. Please try again shortly.");
+                setError(err.response?.data?.message || "Failed to load Participants. Please try again shortly.");
             }
 
             finally {
@@ -78,6 +82,7 @@ function ChallengeDetailsPage() {
 
         catch (err) {
             console.error("Failed to send invite", err);
+            setError(err.response?.data?.message || "Failed to send invite");
         }
 
     }
@@ -92,6 +97,21 @@ function ChallengeDetailsPage() {
 
         const response = await getParticipants(id);
         setParticipants(response);
+    }
+
+    async function handleJoin() {
+
+        try {
+            await joinChallenge(id);
+
+            const response = await getParticipants(id)
+            setParticipants(response);
+        }
+
+        catch (err) {
+            console.error("Failed to join challenge", err);
+            setError(err.response?.data?.message || "Failed to send invite");
+        }
     }
 
 
@@ -144,7 +164,7 @@ function ChallengeDetailsPage() {
                     </p>
 
 
-                    {challenge.creator.username === user.username && (
+                    {challenge.creator._id === user._id && !challenge.isPublic && (
                         <div>
                             <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
 
@@ -161,6 +181,18 @@ function ChallengeDetailsPage() {
                             )}
                         </div>
                     )}
+
+                    {error && <p className="err">Error: {error}</p>}
+
+
+                    {challenge.isPublic &&
+                        challenge.creator._id !== user._id &&
+                        !isParticipant && (
+                            <button onClick={handleJoin}> Join</button>
+                        )}
+
+                    {error && <p className="err">Error: {error}</p>}
+
 
                     <p>Current Participants:</p>
                     {participants.map((participant) => (
