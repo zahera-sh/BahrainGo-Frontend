@@ -14,6 +14,9 @@ function ChallengeDetailsPage() {
     const [invitee, setInvitee] = useState("");
     const [showInvite, setShowInvite] = useState(false);
     const [participants, setParticipants] = useState([]);
+    const [progress, setProgress] = useState("");
+    const [comment, setComment] = useState("");
+    const [selectedParticipant, setSelectedParticipant] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
@@ -21,6 +24,10 @@ function ChallengeDetailsPage() {
     const navigate = useNavigate();
 
     const isParticipant = participants.some(
+        (participant) => participant.userId._id === user._id
+    );
+
+    const myParticipant = participants.find(
         (participant) => participant.userId._id === user._id
     );
 
@@ -87,16 +94,29 @@ function ChallengeDetailsPage() {
 
     }
 
-    async function handleUpdateProgress(participant) {
+    async function handleUpdateProgress() {
 
-        const newProgress = participant.progress + 1;
+        try {
+            const addedProgress = Number(progress)
+            const newProgress = myParticipant.progress + addedProgress
 
-        await updateProgress(id, {
-            progress: newProgress
-        });
+            await updateProgress(id, {
+                progress: newProgress,
+                comment
+            })
 
-        const response = await getParticipants(id);
-        setParticipants(response);
+            setProgress("")
+            setComment("");
+
+            const response = await getParticipants(id);
+            setParticipants(response)
+        }
+
+        catch (err) {
+            console.error("Failed to update progress", err);
+            setError(err.response?.data?.message || "Failed to update progress.");
+        }
+
     }
 
     async function handleJoin() {
@@ -164,6 +184,7 @@ function ChallengeDetailsPage() {
                     </p>
 
 
+
                     {challenge.creator._id === user._id && !challenge.isPublic && (
                         <div>
                             <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
@@ -185,6 +206,7 @@ function ChallengeDetailsPage() {
                     {error && <p className="err">Error: {error}</p>}
 
 
+
                     {challenge.isPublic &&
                         challenge.creator._id !== user._id &&
                         !isParticipant && (
@@ -194,36 +216,109 @@ function ChallengeDetailsPage() {
                     {error && <p className="err">Error: {error}</p>}
 
 
-                    <p>Current Participants:</p>
-                    {participants.map((participant) => (
-                        <div key={participant._id}>
-                            <h3>{participant.userId.username}</h3>
 
-                            {participant.isComplete
-                                ? (
-                                    <p>
-                                        ✅ Completed at{" "}
-                                        {new Date(participant.completeAt).toLocaleString("en-GB", {
+                    {myParticipant && !myParticipant.isComplete && (
+                        <div className="update-panel">
+
+                            <h2>Update Your Progress</h2>
+
+                            <p>Current Progress: {myParticipant.progress} / {challenge.goal}</p>
+
+                            <input
+                                type="number"
+                                min="1"
+                                placeholder="Add to your progress"
+                                value={progress}
+                                onChange={(event) => setProgress(event.target.value)}
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Add a comment..."
+                                value={comment}
+                                onChange={(event) => setComment(event.target.value)}
+                            />
+
+                            <button onClick={handleUpdateProgress}> ➕ Update Progress</button>
+
+                        </div>
+                    )}
+
+
+
+                    <div className="participants">
+
+                        <h2>Current Participants</h2>
+
+                        {participants.map((participant) => (
+
+                            <div key={participant._id} className="participant">
+
+                                <button
+                                    className="participant-name"
+                                    onClick={() => setSelectedParticipant(participant)}
+                                > {participant.userId.username}</button>
+
+                                <p>{participant.isComplete
+                                    ? "✅ Completed"
+                                    : `Progress: ${participant.progress} / ${challenge.goal}`
+                                }</p>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+
+
+                    {selectedParticipant && (
+                        <div className="participant-bubble">
+
+                            <button
+                                className="close-button"
+                                onClick={() => setSelectedParticipant(null)}
+                            >
+                                Show Less
+                            </button>
+
+                            <h2>{selectedParticipant.userId.username}</h2>
+
+                            <p>Progress: {selectedParticipant.progress} / {challenge.goal}</p>
+
+                            {selectedParticipant.isComplete && (
+                                <p>✅ Completed at{" "}
+                                    {new Date(selectedParticipant.completeAt).toLocaleString("en-GB", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                        hour: "numeric",
+                                        minute: "2-digit"
+                                    })}
+                                </p>
+                            )}
+
+                            <h3>Progress Log</h3>
+
+                            {selectedParticipant.logs?.length > 0 ? (
+                                selectedParticipant.logs.map((log) => (
+                                    <div key={log._id} className="progress-log">
+                                        <p>{log.comment}</p>
+                                        {new Date(log.createdAt).toLocaleString("en-GB", {
                                             day: "numeric",
                                             month: "long",
                                             year: "numeric",
                                             hour: "numeric",
                                             minute: "2-digit"
                                         })}
-                                    </p>
-                                )
-                                : (
-                                    <div>
-                                        <p>Progress: {participant.progress}</p>
-
-                                        {participant.userId._id === user._id && (
-                                            <button onClick={() => handleUpdateProgress(participant)}>➕</button>
-                                        )}
                                     </div>
-                                )
-                            }
+                                ))
+                            ) : (
+                                <p>No updates yet.</p>
+                            )}
+
                         </div>
-                    ))}
+                    )}
 
                 </>)
 
