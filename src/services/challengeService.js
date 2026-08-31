@@ -21,10 +21,16 @@ async function getMyChallenges() {
     return response.data
 }
 
+async function deleteChallenge(id) {
+    const response = await api.delete(`/challenges/${id}`);
+    return response.data
+}
+
 
 export {
     createChallenge,
     getPublicChallenges,
     getChallengeById,
     getMyChallenges,
+    deleteChallenge
 }

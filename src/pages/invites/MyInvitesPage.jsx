@@ -46,10 +46,10 @@ function MyInvitesPage() {
         return <div className="err">{error}</div>;
     }
 
-    async function handleAccept(inviteId) {
+    async function handleAccept(id) {
 
         try {
-            await acceptInvite(inviteId);
+            await acceptInvite(id);
 
             const response = await getMyInvites();
             setMyInvites(response);
@@ -60,10 +60,10 @@ function MyInvitesPage() {
         }
     }
 
-    async function handleReject(inviteId) {
+    async function handleReject(id) {
 
         try {
-            await rejectInvite(inviteId);
+            await rejectInvite(id);
 
             const response = await getMyInvites();
             setMyInvites(response);

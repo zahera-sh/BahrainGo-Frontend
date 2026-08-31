@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
-import { getChallengeById } from "../../services/challengeService";
-import { createInvite } from "../../services/inviteSrvice";
+import { getChallengeById, deleteChallenge } from "../../services/challengeService";
+import { createInvite, dropChallenge } from "../../services/inviteSrvice";
 import { getParticipants, joinChallenge, updateProgress } from "../../services/participantService";
 
 
@@ -134,6 +134,62 @@ function ChallengeDetailsPage() {
         }
     }
 
+    async function handleDropChallenge() {
+        const confirmed = window.confirm(
+            "Are you sure you want to drop this challenge? This action cannot be undone."
+        );
+
+        if (!confirmed) return
+
+        try {
+            await dropChallenge(id)
+
+            const response = await getParticipants(id);
+            setParticipants(response);
+
+            if (challenge.isPublic) {
+                alert("You have dropped this challenge.");
+            }
+
+            else {
+                navigate("/challenges/my")
+            }
+        }
+
+        catch (err) {
+            console.error("Failed to drop challenge", err);
+            setError(err.response?.data?.message || "Failed to drop challenge.")
+        }
+
+    }
+
+    async function handleDeleteChallenge() {
+
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this challenge? This action cannot be undone."
+        );
+
+        if (!confirmed) return
+
+        try {
+            await deleteChallenge(id);
+
+            if (challenge.isPublic) {
+                alert("Challenge deleted successfully.");
+            }
+
+            else {
+                navigate("/challenges/my")
+            }
+        }
+
+        catch (err) {
+            console.error("Failed to delete challenge", err)
+            setError(err.response?.data?.message || "Failed to delete challenge.");
+        }
+
+    }
+
 
     return (
         <main>
@@ -203,6 +259,11 @@ function ChallengeDetailsPage() {
                         </div>
                     )}
 
+
+                    {challenge.creator._id === user._id && (
+                        <button onClick={handleDeleteChallenge}>🗑️ Delete Challenge</button>
+                    )}
+
                     {error && <p className="err">Error: {error}</p>}
 
 
@@ -240,6 +301,8 @@ function ChallengeDetailsPage() {
                             />
 
                             <button onClick={handleUpdateProgress}> ➕ Update Progress</button>
+
+                            <button onClick={handleDropChallenge}>Drop Challenge </button>
 
                         </div>
                     )}
