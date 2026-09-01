@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
+import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getMyChallenges } from "../../services/challengeService";
 import { getMyParticipants } from "../../services/participantService";
 
 
 function MyChallengesPage() {
 
-    document.title = `My Challenges`
+    document.title = `My Challenges`;
 
     const [myChallenges, setMyChallenges] = useState([]);
     const [myParticipants, setMyParticipants] = useState([]);
@@ -39,6 +40,7 @@ function MyChallengesPage() {
         async function loadMyParticipants() {
 
             try {
+                setLoading(true);
                 const response = await getMyParticipants();
                 setMyParticipants(response);
             }
@@ -46,6 +48,10 @@ function MyChallengesPage() {
             catch (err) {
                 console.error("Failed to load participants", err);
                 setError("Failed to load participants. Please try again shortly.");
+            }
+
+            finally {
+                setLoading(false);
             }
 
         }
@@ -56,11 +62,24 @@ function MyChallengesPage() {
     }, []);
 
     if (loading) {
-        return <div className="loading">Loading Challenges...</div>;
+        return <div className="loading">
+            <LineWave
+                visible={true}
+                height="150"
+                width="150"
+                color="red"
+                ariaLabel="line-wave-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                firstLineColor=""
+                middleLineColor=""
+                lastLineColor=""
+            />
+        </div>
     }
 
     if (error) {
-        return <div className="err">{error}</div>;
+        return <div className="err">{error}</div>
     }
 
 

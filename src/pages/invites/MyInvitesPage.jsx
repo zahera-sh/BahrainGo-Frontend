@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router";
+import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getMyInvites, acceptInvite, rejectInvite } from "../../services/inviteSrvice";
 
 
@@ -39,7 +40,20 @@ function MyInvitesPage() {
     }, []);
 
     if (loading) {
-        return <div className="loading">Loading Invites...</div>;
+        return <div className="loading">
+            <LineWave
+                visible={true}
+                height="150"
+                width="150"
+                color="red"
+                ariaLabel="line-wave-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                firstLineColor=""
+                middleLineColor=""
+                lastLineColor=""
+            />
+        </div>;
     }
 
     if (error) {

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
+import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getPublicChallenges } from "../../services/challengeService";
 
 
 function PublicChallengePage() {
 
-    document.title = `Challenges`
+    document.title = `Challenges`;
 
     const [publicChallenges, setPublicChallenges] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,7 +40,20 @@ function PublicChallengePage() {
     }, []);
 
     if (loading) {
-        return <div className="loading">Loading Challenges...</div>;
+        return <div className="loading">
+            <LineWave
+                visible={true}
+                height="150"
+                width="150"
+                color="red"
+                ariaLabel="line-wave-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                firstLineColor=""
+                middleLineColor=""
+                lastLineColor=""
+            />
+        </div>
     }
 
     if (error) {

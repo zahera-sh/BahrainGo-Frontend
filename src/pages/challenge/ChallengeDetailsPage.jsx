@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
+import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getChallengeById, deleteChallenge } from "../../services/challengeService";
 import { createInvite, dropChallenge } from "../../services/inviteSrvice";
 import { getParticipants, joinChallenge, updateProgress } from "../../services/participantService";
@@ -8,7 +9,7 @@ import { getParticipants, joinChallenge, updateProgress } from "../../services/p
 
 function ChallengeDetailsPage() {
 
-    document.title = `Challenges`;
+    document.title = `Challenge`;
 
     const [challenge, setChallenge] = useState(null);
     const [invitee, setInvitee] = useState("");
@@ -55,6 +56,7 @@ function ChallengeDetailsPage() {
         async function loadParticipants() {
 
             try {
+                setLoading(true);
                 const response = await getParticipants(id);
                 setParticipants(response);
             }
@@ -190,205 +192,219 @@ function ChallengeDetailsPage() {
 
     }
 
+    if (loading) {
+        return <div className="loading">
+            <LineWave
+                visible={true}
+                height="150"
+                width="150"
+                color="red"
+                ariaLabel="line-wave-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                firstLineColor=""
+                middleLineColor=""
+                lastLineColor=""
+            />
+        </div>
+    }
+
+    if (error) {
+        return <div className="err">{error}</div>;
+    }
+
 
     return (
         <main>
 
-            {challenge
-                ? (<>
-                    <p>{challenge.isPublic == true
-                        ? " Public Challenge"
-                        : " Private Challenge"}</p>
+            <p>{challenge.isPublic == true
+                ? " Public Challenge"
+                : " Private Challenge"}</p>
 
-                    <p>{challenge.status}</p>
-                    <h2>{challenge.description}</h2>
-                    <p>{challenge.type}</p>
+            <p>{challenge.status}</p>
+            <h2>{challenge.description}</h2>
+            <p>{challenge.type}</p>
 
-                    <p>Goal:
-                        {challenge.isMeasurable == true
-                            ? ` ${challenge.goal}`
-                            : " Complete Challenge"}
-                    </p>
+            <p>Goal:
+                {challenge.isMeasurable == true
+                    ? ` ${challenge.goal}`
+                    : " Complete Challenge"}
+            </p>
 
-                    <p>Reward: {challenge.reward}xp</p>
+            <p>Reward: {challenge.reward}xp</p>
 
-                    <p>{challenge.creator.role == "business"
-                        ? `Extra Reward: ${challenge.businessReward}`
-                        : " "}
-                    </p>
+            <p>{challenge.creator.role == "business"
+                ? `Extra Reward: ${challenge.businessReward}`
+                : " "}
+            </p>
 
-                    <p>Start: {new Date(challenge.startTime).toLocaleString("en-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit"
-                    })}</p>
+            <p>Start: {new Date(challenge.startTime).toLocaleString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            })}</p>
 
-                    <p>End: {new Date(challenge.endTime).toLocaleString("en-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit"
-                    })}</p>
+            <p>End: {new Date(challenge.endTime).toLocaleString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            })}</p>
 
-                    <p>Challenged by: {challenge.creator.username} [
-                        {challenge.creator.role == "admin" || challenge.creator.role == "business"
-                            ? challenge.creator.role
-                            : `${challenge.creator.points}xp`}]
-                    </p>
+            <p>Challenged by: {challenge.creator.username} [
+                {challenge.creator.role == "admin" || challenge.creator.role == "business"
+                    ? challenge.creator.role
+                    : `${challenge.creator.points}xp`}]
+            </p>
 
 
 
-                    {challenge.creator._id === user._id && !challenge.isPublic && (
+            {challenge.creator._id === user._id && !challenge.isPublic && (
+                <div>
+                    <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
+
+                    {showInvite && (
                         <div>
-                            <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
-
-                            {showInvite && (
-                                <div>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter user ID"
-                                        value={invitee}
-                                        onChange={(event) => setInvitee(event.target.value)}
-                                    />
-                                    <button onClick={handleInvite}>Send</button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-
-                    {challenge.creator._id === user._id && (
-                        <button onClick={handleDeleteChallenge}>🗑️ Delete Challenge</button>
-                    )}
-
-                    {error && <p className="err">Error: {error}</p>}
-
-
-
-                    {challenge.isPublic &&
-                        challenge.creator._id !== user._id &&
-                        !isParticipant && (
-                            <button onClick={handleJoin}> Join</button>
-                        )}
-
-                    {error && <p className="err">Error: {error}</p>}
-
-
-
-                    {myParticipant && !myParticipant.isComplete && (
-                        <div className="update-panel">
-
-                            <h2>Update Your Progress</h2>
-
-                            <p>Current Progress: {myParticipant.progress} / {challenge.goal}</p>
-
-                            <input
-                                type="number"
-                                min="1"
-                                placeholder="Add to your progress"
-                                value={progress}
-                                onChange={(event) => setProgress(event.target.value)}
-                            />
-
                             <input
                                 type="text"
-                                placeholder="Add a comment..."
-                                value={comment}
-                                onChange={(event) => setComment(event.target.value)}
+                                placeholder="Enter user ID"
+                                value={invitee}
+                                onChange={(event) => setInvitee(event.target.value)}
                             />
-
-                            <button onClick={handleUpdateProgress}> ➕ Update Progress</button>
-
-                            <button onClick={handleDropChallenge}>Drop Challenge </button>
-
+                            <button onClick={handleInvite}>Send</button>
                         </div>
                     )}
+                </div>
+            )}
 
 
-                    <Link to={`/challenges/${id}/report`}>⚠️</Link>
+            {challenge.creator._id === user._id && (
+                <button onClick={handleDeleteChallenge}>🗑️ Delete Challenge</button>
+            )}
+
+            {error && <p className="err">Error: {error}</p>}
 
 
-                    <div className="participants">
 
-                        <h2>Current Participants</h2>
+            {challenge.isPublic &&
+                challenge.creator._id !== user._id &&
+                !isParticipant && (
+                    <button onClick={handleJoin}> Join</button>
+                )}
 
-                        {participants.map((participant) => (
+            {error && <p className="err">Error: {error}</p>}
 
-                            <div key={participant._id} className="participant">
 
-                                <button
-                                    className="participant-name"
-                                    onClick={() => setSelectedParticipant(participant)}
-                                > {participant.userId.username}</button>
 
-                                <p>{participant.isComplete
-                                    ? "✅ Completed"
-                                    : `Progress: ${participant.progress} / ${challenge.goal}`
-                                }</p>
+            {myParticipant && !myParticipant.isComplete && (
+                <div className="update-panel">
 
-                            </div>
+                    <h2>Update Your Progress</h2>
 
-                        ))}
+                    <p>Current Progress: {myParticipant.progress} / {challenge.goal}</p>
+
+                    <input
+                        type="number"
+                        min="1"
+                        placeholder="Add to your progress"
+                        value={progress}
+                        onChange={(event) => setProgress(event.target.value)}
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="Add a comment..."
+                        value={comment}
+                        onChange={(event) => setComment(event.target.value)}
+                    />
+
+                    <button onClick={handleUpdateProgress}> ➕ Update Progress</button>
+
+                    <button onClick={handleDropChallenge}>Drop Challenge </button>
+
+                </div>
+            )}
+
+
+            <Link to={`/challenges/${id}/report`}>⚠️</Link>
+
+
+            <div className="participants">
+
+                <h2>Current Participants</h2>
+
+                {participants.map((participant) => (
+
+                    <div key={participant._id} className="participant">
+
+                        <button
+                            className="participant-name"
+                            onClick={() => setSelectedParticipant(participant)}
+                        > {participant.userId.username}</button>
+
+                        <p>{participant.isComplete
+                            ? "✅ Completed"
+                            : `Progress: ${participant.progress} / ${challenge.goal}`
+                        }</p>
 
                     </div>
 
+                ))}
+
+            </div>
 
 
-                    {selectedParticipant && (
-                        <div className="participant-bubble">
 
-                            <button
-                                className="close-button"
-                                onClick={() => setSelectedParticipant(null)}
-                            >
-                                Show Less
-                            </button>
+            {selectedParticipant && (
+                <div className="participant-bubble">
 
-                            <h2>{selectedParticipant.userId.username}</h2>
+                    <button
+                        className="close-button"
+                        onClick={() => setSelectedParticipant(null)}
+                    >
+                        Show Less
+                    </button>
 
-                            <p>Progress: {selectedParticipant.progress} / {challenge.goal}</p>
+                    <h2>{selectedParticipant.userId.username}</h2>
 
-                            {selectedParticipant.isComplete && (
-                                <p>✅ Completed at{" "}
-                                    {new Date(selectedParticipant.completeAt).toLocaleString("en-GB", {
-                                        day: "numeric",
-                                        month: "long",
-                                        year: "numeric",
-                                        hour: "numeric",
-                                        minute: "2-digit"
-                                    })}
-                                </p>
-                            )}
+                    <p>Progress: {selectedParticipant.progress} / {challenge.goal}</p>
 
-                            <h3>Progress Log</h3>
-
-                            {selectedParticipant.logs?.length > 0 ? (
-                                selectedParticipant.logs.map((log) => (
-                                    <div key={log._id} className="progress-log">
-                                        <p>{log.comment}</p>
-                                        {new Date(log.createdAt).toLocaleString("en-GB", {
-                                            day: "numeric",
-                                            month: "long",
-                                            year: "numeric",
-                                            hour: "numeric",
-                                            minute: "2-digit"
-                                        })}
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No updates yet.</p>
-                            )}
-
-                        </div>
+                    {selectedParticipant.isComplete && (
+                        <p>✅ Completed at{" "}
+                            {new Date(selectedParticipant.completeAt).toLocaleString("en-GB", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit"
+                            })}
+                        </p>
                     )}
 
-                </>)
+                    <h3>Progress Log</h3>
 
-                : <p>Loading....</p>
-            }
+                    {selectedParticipant.logs?.length > 0 ? (
+                        selectedParticipant.logs.map((log) => (
+                            <div key={log._id} className="progress-log">
+                                <p>{log.comment}</p>
+                                {new Date(log.createdAt).toLocaleString("en-GB", {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                    hour: "numeric",
+                                    minute: "2-digit"
+                                })}
+                            </div>
+                        ))
+                    ) : (
+                        <p>No updates yet.</p>
+                    )}
+
+                </div>
+            )}
 
         </main>
     );
