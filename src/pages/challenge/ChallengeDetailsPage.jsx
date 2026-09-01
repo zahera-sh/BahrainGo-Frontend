@@ -308,6 +308,8 @@ function ChallengeDetailsPage() {
                     )}
 
 
+                    <Link to={`/challenges/${id}/report`}>⚠️</Link>
+
 
                     <div className="participants">
 
