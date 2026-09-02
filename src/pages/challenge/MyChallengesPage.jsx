@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getMyChallenges } from "../../services/challengeService";
 import { getMyParticipants } from "../../services/participantService";
-
+import "../../styles/my.css"
 
 function MyChallengesPage() {
 
@@ -62,64 +62,76 @@ function MyChallengesPage() {
     }, []);
 
     if (loading) {
-        return <div className="loading">
-            <LineWave
-                visible={true}
-                height="150"
-                width="150"
-                color="red"
-                ariaLabel="line-wave-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                firstLineColor=""
-                middleLineColor=""
-                lastLineColor=""
-            />
-        </div>
+        return (
+            <main className="challenge-loading">
+                <LineWave visible={true} height="150" width="150" color="#f31919" ariaLabel="line-wave-loading" />
+                <p>LOADING CHALLENGES...</p>
+            </main>
+        )
     }
 
     if (error) {
-        return <div className="err">{error}</div>
+        return (
+            <main className="challenge-error">
+                <div className="error-card">
+                    <span className="error-code">ERROR</span>
+                    <h1>Something went wrong!</h1>
+                    <p>{error}</p>
+                    <Link to="/dashboard"> ← Back to Dashboard </Link>
+                </div>
+            </main>
+        )
     }
 
-
     return (
-        <main>
+        <main className="my-challenges-page">
 
-            <div className="myChallenges">
-                <h1>Challenges By Me</h1>
+            <section className="my-challenges-column">
+
+                <div className="my-challenges-header">
+                    <span className="section-label">PLAYER MISSIONS</span>
+                    <h1>Challenges By Me</h1>
+                </div>
 
                 {myChallenges.map((challenge) => (
-                    <div key={challenge._id}>
-                        <h3>{challenge.description}</h3>
-                        <p>{challenge.type}</p>
+                    <div className="my-challenge-card" key={challenge._id}>
+                        <div>
+                            <span className="challenge-type">{challenge.type}</span>
+                            <h3>{challenge.description}</h3>
+                        </div>
 
-                        <Link to={`/challenges/${challenge._id}`}>➡️</Link>
+                        <Link to={`/challenges/${challenge._id}`}>→</Link>
                     </div>
                 ))}
-            </div>
 
-            <div className="myParticipants">
-                <h1>Challenges Joined</h1>
+            </section>
 
-                {myParticipants.map((participants) => {
-                    if (participants.challengeId.creator._id !== user._id) {
-                        return (
-                            <div key={participants._id}>
+            <section className="my-challenges-column">
+
+                <div className="my-challenges-header">
+                    <span className="section-label">ACTIVE MISSIONS</span>
+                    <h1>Challenges Joined</h1>
+                </div>
+
+                {myParticipants
+                    .filter((participants) => participants.challengeId.creator._id !== user._id)
+                    .map((participants) => (
+                        <div className="my-challenge-card" key={participants._id}>
+                            <div>
+                                <span className="challenge-type">
+                                    {participants.challengeId.type}
+                                </span>
                                 <h3>{participants.challengeId.description}</h3>
-                                <p>{participants.challengeId.type}</p>
-                                <p>Creator: {participants.challengeId.creator.username}</p>
-
-                                <Link to={`/challenges/${participants.challengeId._id}`}>➡️</Link>
+                                <p>Creator: {participants.challengeId.creator.username} </p>
                             </div>
-                        )
-                    }
-                })}
-            </div>
+
+                            <Link to={`/challenges/${participants.challengeId._id}`}>→</Link>
+                        </div>
+                    ))}
+            </section>
 
         </main>
     );
 }
-
 
 export default MyChallengesPage;

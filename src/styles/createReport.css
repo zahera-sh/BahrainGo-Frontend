@@ -1,0 +1,147 @@
+.create-report-page {
+    min-height: 100vh;
+    padding: 70px 20px;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        #0b0b18;
+    background-size: 30px 30px;
+}
+
+.create-report-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.create-report-header h1 {
+    margin: 12px 0;
+    color: #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: clamp(28px, 5vw, 46px);
+    text-transform: uppercase;
+}
+
+.create-report-header p {
+    color: #d8d8e8;
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+}
+
+.create-report-form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 35px;
+    background: #17112f;
+    border: 3px solid #6c2cff;
+    box-shadow: 10px 10px 0 #000;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+    color: #ffe500;
+    font-family: "Silkscreen", monospace;
+    font-size: 13px;
+}
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #0b0b18;
+    border: 2px solid #6c2cff;
+    outline: none;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ffe500;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group textarea {
+    min-height: 180px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.form-group textarea::placeholder {
+    color: #77758a;
+}
+
+.report-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(243, 25, 25, 0.08);
+    border: 2px dashed #f31919;
+}
+
+.report-warning span {
+    color: #f31919;
+    font-size: 20px;
+}
+
+.report-warning p {
+    margin: 0;
+    color: #d8d8e8;
+    font-family: "Roboto Mono", monospace;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.report-form-error {
+    max-width: 700px;
+    margin: 0 auto 25px;
+    padding: 15px 20px;
+    background: #f31919;
+    border: 3px solid #fff;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+}
+
+.report-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.report-actions .btn {
+    flex: 1;
+    padding: 16px;
+    border: 3px solid #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.report-actions .btn-yellow {
+    background: #ffe500;
+    color: #17112f;
+}
+
+.report-actions .btn-danger {
+    background: #f31919;
+    color: #fff;
+}
+
+.report-actions .btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 #000;
+}

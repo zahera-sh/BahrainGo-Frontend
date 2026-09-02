@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { createReport } from "../../services/reportService";
-
+import "../../styles/createReport.css"
 
 function CreateReportPage() {
 
@@ -36,81 +36,64 @@ function CreateReportPage() {
 
     }
 
-
     return (
-        <main>
+        <main className="create-report-page">
 
-            <h1>Report Challenge</h1>
+            <section className="create-report-header">
+                <span className="section-label">SAFETY TERMINAL</span>
+                <h1>Report Challenge</h1>
+                <p>Something wrong? Let us know what happened.</p>
+            </section>
 
             {error && (
-                <p className="err">
-                    Error: {error}
-                </p>
+                <div className="report-form-error">⚠ {error}</div>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form className="create-report-form" onSubmit={handleSubmit} >
 
-                <label htmlFor="complaintType">
-                    Reason
-                </label>
-                <select
-                    id="complaintType"
-                    value={complaintType}
-                    onChange={(event) => setComplaintType(event.target.value)}
-                    required
-                >
-                    <option value="">
-                        Select a reason
-                    </option>
-                    <option value="Harmful or Dangerous Content">
-                        Harmful or Dangerous Content
-                    </option>
-                    <option value="Harrassment or Hate Speech">
-                        Harrassment or Hate Speech
-                    </option>
-                    <option value="Sexual or Inappropriate Content">
-                        Sexual or Inappropriate Content
-                    </option>
-                    <option value="Privacy or Personal Information">
-                        Privacy or Personal Information
-                    </option>
-                    <option value="Fraud or Scam">
-                        Fraud or Scam
-                    </option>
-                    <option value="Reward Not Provided">
-                        Reward Not Provided
-                    </option>
-                    <option value="Reward or Challenge Misrepresentation">
-                        Reward or Challenge Misrepresentation
-                    </option>
-                    <option value="Violation of Terms of Service">
-                        Violation of Terms of Service
-                    </option>
-                    <option value="Spam or Misleading Content">
-                        Spam or Misleading Content
-                    </option>
-                    <option value="Other">
-                        Other
-                    </option>
-                </select>
+                <div className="form-group">
+                    <label htmlFor="complaintType">Reason</label>
+                    <select
+                        id="complaintType"
+                        value={complaintType}
+                        onChange={(event) => setComplaintType(event.target.value)}
+                        required
+                    >
+                        <option value="">Select a reason</option>
+                        <option value="Harmful or Dangerous Content">Harmful or Dangerous Content</option>
+                        <option value="Harrassment or Hate Speech">Harassment or Hate Speech</option>
+                        <option value="Sexual or Inappropriate Content">Sexual or Inappropriate Content</option>
+                        <option value="Privacy or Personal Information">Privacy or Personal Information</option>
+                        <option value="Fraud or Scam">Fraud or Scam</option>
+                        <option value="Reward Not Provided">Reward Not Provided</option>
+                        <option value="Reward or Challenge Misrepresentation">Reward or Challenge Misrepresentation</option>
+                        <option value="Violation of Terms of Service">Violation of Terms of Service</option>
+                        <option value="Spam or Misleading Content">Spam or Misleading Content</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
 
-                <label htmlFor="complaintBody">
-                    Details
-                </label>
-                <textarea
-                    id="complaintBody"
-                    placeholder="Tell us what happened..."
-                    value={complaintBody}
-                    onChange={(event) => setComplaintBody(event.target.value)}
-                    required
-                />
+                <div className="form-group">
+                    <label htmlFor="complaintBody">Details</label>
+                    <textarea
+                        id="complaintBody"
+                        placeholder="Tell us what happened..."
+                        value={complaintBody}
+                        onChange={(event) => setComplaintBody(event.target.value)}
+                        required
+                    />
+                </div>
 
-                <button type="submit">🚩 Submit Report</button>
+                <div className="report-warning">
+                    <span>⚠</span>
+                    <p>Please only submit reports for genuine concerns. False or abusive reports may be reviewed.</p>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={() => navigate(`/challenges/${id}`)}
-                >Cancel</button>
+                <div className="report-actions">
+                    <button type="submit" className="btn btn-yellow" >🚩 SUBMIT REPORT</button>
+
+                    <button type="button" className="btn btn-danger" onClick={() => navigate(`/challenges/${id}`)}>✕ CANCEL</button>
+                </div>
 
             </form>
 

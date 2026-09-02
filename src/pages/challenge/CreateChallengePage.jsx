@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import { createChallenge } from "../../services/challengeService";
-
+import "../../styles/createChallenge.css"
 
 function CreateChallengePage() {
 
@@ -11,7 +11,6 @@ function CreateChallengePage() {
     const [formData, setFormData] = useState({
         type: "",
         description: "",
-        // photo: "",
         isMeasurable: false,
         goal: 1,
         startTime: "",
@@ -41,17 +40,19 @@ function CreateChallengePage() {
 
 
     return (
-        <main className="createChallengePage">
+        <main className="create-challenge-page">
 
-            <div>
-                <p>Feeling Brave?</p>
+            <section className="create-challenge-header">
+                <span className="section-label">MISSION CONTROL</span>
+                <p>FEELING BRAVE?</p>
                 <h1>Create a Challenge</h1>
-            </div>
+                <p className="create-challenge-subtitle">Set the challenge. Choose the rules. Let the adventure begin.</p>
+            </section>
 
-            <form className="createChallengeForm" onSubmit={handleSubmit}>
+            <form className="create-challenge-form" onSubmit={handleSubmit}>
 
-                <div className="createChallengeInput">
-                    <label htmlFor="type">Type:</label>
+                <div className="form-group">
+                    <label htmlFor="type"> Challenge Type</label>
                     <select
                         name="type"
                         id="type"
@@ -75,106 +76,107 @@ function CreateChallengePage() {
                     </select>
                 </div>
 
-                <div className="createChallengeInput">
-                    <label htmlFor="description">Description:</label>
+                <div className="form-group">
+                    <label htmlFor="description"> Description </label>
                     <textarea
-                        type="text"
                         name="description"
                         id="description"
+                        placeholder="What is the challenge?"
                         onChange={handleChange}
                         value={formData.description}
                         required
                         minLength={10}
                     />
+                    <small>Tell players what they need to accomplish.</small>
                 </div>
 
-                {/* <div className="createChallengeInput">
-                    <label htmlFor="photo">Image:</label>
-                    <input
-                        type="text"
-                        name="photo"
-                        id="photo"
-                        onChange={handleChange}
-                        value={formData.photo}
-                    />
-                </div> */}
-
-                <div className="createChallengeInput">
-                    <label htmlFor="isMeasurable">Measurable</label>
-                    <input
-                        type="checkbox"
-                        name="isMeasurable"
-                        id="isMeasurable"
-                        onChange={handleChange}
-                        value={formData.isMeasurable}
-                    />
+                <div className="measurable-box">
+                    <label htmlFor="isMeasurable">
+                        <input
+                            type="checkbox"
+                            name="isMeasurable"
+                            id="isMeasurable"
+                            onChange={handleChange}
+                            checked={formData.isMeasurable}
+                        />
+                        <span>This challenge has a measurable goal</span>
+                    </label>
                 </div>
 
-                <div className="createChallengeInput">
-                    <div style={{ display: formData.isMeasurable ? "block" : "none" }}>
+                {formData.isMeasurable && (
+                    <div className="form-group goal-field">
                         <label htmlFor="goal">Goal</label>
                         <input
                             type="number"
                             name="goal"
                             id="goal"
+                            min="1"
+                            placeholder="e.g. 10"
                             onChange={handleChange}
                             value={formData.goal}
+                            required
+                        />
+                    </div>
+                )}
+
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="startTime">Start Time</label>
+                        <input
+                            type="datetime-local"
+                            name="startTime"
+                            id="startTime"
+                            onChange={handleChange}
+                            value={formData.startTime}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="endTime">End Time</label>
+                        <input
+                            type="datetime-local"
+                            name="endTime"
+                            id="endTime"
+                            onChange={handleChange}
+                            value={formData.endTime}
                         />
                     </div>
                 </div>
 
-                <div className="createChallengeInput">
-                    <label htmlFor="startTime">Start Time:</label>
-                    <input
-                        type="datetime-local"
-                        name="startTime"
-                        id="startTime"
-                        onChange={handleChange}
-                        value={formData.startTime}
-                    />
-                </div>
-
-                <div className="createChallengeInput">
-                    <label htmlFor="endTime">End Time:</label>
-                    <input
-                        type="datetime-local"
-                        name="endTime"
-                        id="endTime"
-                        onChange={handleChange}
-                        value={formData.endTime}
-                    />
-                </div>
-
-                <div className="createChallengeInput">
-                    <div style={{ display: user.role == "admin" ? "block" : "none" }}>
-                        <label htmlFor="reward">Reward</label>
+                {user.role === "admin" && (
+                    <div className="form-group special-field">
+                        <label htmlFor="reward">⭐ XP Reward</label>
                         <input
                             type="number"
                             name="reward"
                             id="reward"
+                            min="0"
                             onChange={handleChange}
                             value={formData.reward}
                         />
+                        <small>Set the XP players receive for completing this challenge.</small>
                     </div>
-                </div>
+                )}
 
-                <div className="createChallengeInput">
-                    <div style={{ display: user.role == "business" ? "block" : "none" }}>
-                        <label htmlFor="businessReward">Reward</label>
+                {user.role === "business" && (
+                    <div className="form-group special-field business-field">
+                        <label htmlFor="businessReward">🎁 Business Reward</label>
                         <input
                             type="text"
                             name="businessReward"
                             id="businessReward"
+                            placeholder="e.g. 20% off your next meal"
                             onChange={handleChange}
                             value={formData.businessReward}
                         />
+                        <small>This reward will be shown to players who complete the challenge.</small>
                     </div>
-                </div>
+                )}
 
-                <div className="createChallengeActions">
-                    <button className="createChallengeButton" type="submit">
-                        Challenge
-                    </button>
+                <div className="create-challenge-actions">
+                    <button className="btn btn-yellow" type="submit">⚡ CREATE CHALLENGE</button>
+
+                    <button className="btn btn-danger" type="button" onClick={() => navigate("/challenges")}> ✕ CANCEL </button>
                 </div>
 
             </form>
@@ -183,6 +185,5 @@ function CreateChallengePage() {
     );
 
 }
-
 
 export default CreateChallengePage;

@@ -1,0 +1,85 @@
+.admin-page {
+    min-height: 100vh;
+    padding: 50px;
+    box-sizing: border-box;
+    background: #0b0b18;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+}
+
+.admin-page h1 {
+    margin-bottom: 30px;
+    color: #ffe500;
+    font-family: "Silkscreen", monospace;
+    font-size: 28px;
+}
+
+.admin-page h2 {
+    margin: 0 0 15px;
+    color: #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: 16px;
+}
+
+.admin-page>a {
+    display: block;
+    width: fit-content;
+    margin: 15px 0;
+    padding: 12px 18px;
+    background: #6c2cff;
+    border: 2px solid #fff;
+    color: #fff;
+    text-decoration: none;
+    font-family: "Silkscreen", monospace;
+    font-size: 11px;
+}
+
+.admin-page>a:hover {
+    background: #f31919;
+}
+
+.admin-card {
+    max-width: 800px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #17112f;
+    border: 2px solid #6c2cff;
+    box-sizing: border-box;
+}
+
+.admin-card p,
+.admin-page>p {
+    color: #d8d8e8;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.admin-page button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background: #f31919;
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.admin-page button:hover {
+    background: #ffe500;
+    color: #17112f;
+}
+
+@media (max-width: 600px) {
+    .admin-page {
+        padding: 30px 15px;
+    }
+
+    .admin-page h1 {
+        font-size: 22px;
+    }
+
+    .admin-card {
+        padding: 15px;
+    }
+}

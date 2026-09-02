@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { signIn } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
-
+import "../styles/signinUp.css";
 
 const SignInForm = ({ }) => {
 
@@ -26,7 +26,14 @@ const SignInForm = ({ }) => {
         try {
             const signedInUser = await signIn(formData);
             setUser(signedInUser);
-            navigate("/dashboard");
+
+            if (signedInUser.role === "admin") {
+                navigate("/admin");
+            }
+
+            else {
+                navigate("/dashboard");
+            }
         }
 
         catch (err) {
@@ -35,46 +42,55 @@ const SignInForm = ({ }) => {
         }
     }
 
-
     return (
-        <main>
-            <h1>Welcome Back</h1>
-            <p>Login and see what you missed!</p>
-            <p className="error">{error}</p>
-            <form autoComplete="off" onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        autoComplete="off"
-                        id="username"
-                        value={formData.username}
-                        name="username"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        autoComplete="off"
-                        id="password"
-                        value={formData.password}
-                        name="password"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <button>Sign In</button>
-                    <button onClick={() => navigate("/")}>Cancel</button>
-                </div>
-            </form>
+        <main className="auth-page">
+
+            <div>
+                <h1>Welcome Back</h1>
+                <p>Login and see what you missed!</p>
+
+                <p className="error">{error}</p>
+
+                <form autoComplete="off" onSubmit={handleSubmit}>
+
+                    <div>
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            autoComplete="off"
+                            id="username"
+                            value={formData.username}
+                            name="username"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            autoComplete="off"
+                            id="password"
+                            value={formData.password}
+                            name="password"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <button>Sign In</button>
+                        <button type="button" onClick={() => navigate("/")}>Cancel</button>
+                    </div>
+
+                </form>
+
+            </div>
+
         </main>
     );
 
 }
-
 
 export default SignInForm;

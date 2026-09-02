@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bitcount+Single:wght@100..900&family=Bonbon&family=Geomini:wght@200..800&family=Honk:MORF@15&family=Londrina+Shadow&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Slab:wght@100..900&family=Silkscreen:wght@400;700&family=Special+Elite&display=swap');
+
+body {
+    margin: 0;
+    background-color: #0b0b18;
+}
+
+.not-found {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    text-align: center;
+    font-family: "Roboto Mono", monospace;
+    position: relative;
+    overflow: hidden;
+}
+
+.not-found::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+/* PAC-MAN---------------------------------------------*/
+.pacman {
+    width: 90px;
+    height: 90px;
+    background: #ffe500;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 35px;
+    image-rendering: pixelated;
+    box-shadow: 5px 5px 0 #b59f00;
+    animation: pacmanFloat 1.8s ease-in-out infinite;
+}
+
+.pacman::before {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+    border-right: 45px solid #0b0b18;
+    animation: mouth 0.35s steps(3) infinite;
+}
+
+.pacman::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #111;
+    border-radius: 50%;
+    top: 18px;
+    left: 55px;
+    box-shadow: 2px 2px 0 #000;
+}
+
+.dots {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 35px;
+}
+
+.dots span {
+    width: 12px;
+    height: 12px;
+    background: #ffe500;
+    display: block;
+    box-shadow: 3px 3px 0 #b59f00;
+    animation: dotPulse 1.2s steps(2) infinite;
+}
+
+.dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.dots span:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+
+.not-found h1 {
+    font-family: "Silkscreen", monospace;
+    font-size: clamp(80px, 15vw, 150px);
+    line-height: 0.9;
+    margin: 0 0 25px;
+    color: #f31919;
+    text-shadow: 6px 6px 0 #6c2cff, 10px 10px 0 #17112f;
+    letter-spacing: 5px;
+    animation: textFlicker 3s steps(1) infinite;
+}
+
+.not-found p {
+    font-family: "Roboto Mono", monospace;
+    font-size: 16px;
+    margin: 0 0 35px;
+    color: #d8d8e8;
+    max-width: 500px;
+    line-height: 1.7;
+}
+
+.notFound-actions {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+.notFound-actions a {
+    font-family: "Silkscreen", monospace;
+    text-decoration: none;
+    color: #ffffff;
+    background: #6c2cff;
+    border: 3px solid #ffffff;
+    padding: 14px 20px;
+    box-shadow: 5px 5px 0 #17112f;
+    width: 250px;
+    transition:
+        transform 0.1s,
+        box-shadow 0.1s,
+        background 0.1s;
+}
+
+.notFound-actions a:hover {
+    background: #f31919;
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 #17112f;
+}
+
+.notFound-actions a:active {
+    transform: translate(5px, 5px);
+    box-shadow: none;
+}
+
+.not-found::after {
+    content: "•  •  •  •  •  •  •  •  •";
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Silkscreen", monospace;
+    font-size: 14px;
+    letter-spacing: 12px;
+    color: #6c2cff;
+    opacity: 0.5;
+    white-space: nowrap;
+}
+
+@keyframes pacmanFloat {
+
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes mouth {
+
+    0% {
+        border-top-width: 50px;
+        border-bottom-width: 50px;
+    }
+
+    50% {
+        border-top-width: 22px;
+        border-bottom-width: 22px;
+    }
+
+    100% {
+        border-top-width: 50px;
+        border-bottom-width: 50px;
+    }
+
+}
+
+@keyframes dotPulse {
+
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(0.65);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+}
+
+@keyframes textFlicker {
+
+    0%,
+    90%,
+    100% {
+        opacity: 1
+    }
+
+    92% {
+        opacity: 0.7;
+    }
+
+    94% {
+        opacity: 1;
+    }
+
+}

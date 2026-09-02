@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { signUp } from "../services/authService";
-
+import "../styles/signinUp.css";
 
 function Signup() {
 
@@ -43,66 +43,78 @@ function Signup() {
         return !(username && email && password && password === passwordConf);
     };
 
-
     return (
-        <main>
-            <p>Don't have an account yet?</p>
-            <h1>Register Now</h1>
-            <p className="error">{error}</p>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        name="username"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        name="email"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        name="password"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="confirm">Confirm Password:</label>
-                    <input
-                        type="password"
-                        id="confirm"
-                        value={passwordConf}
-                        name="passwordConf"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <button disabled={isFormInvalid() || submitting}>{submitting ? "Signing up..." : "Sign Up"}</button>
-                    <button onClick={() => navigate("/")}>Cancel</button>
-                </div>
-            </form>
+        <main className="auth-page">
+
+            <div>
+
+                <p>Don't have an account yet?</p>
+                <h1>Register Now</h1>
+
+                <p className="error">{error}</p>
+
+                <form onSubmit={handleSubmit}>
+
+                    <div>
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            name="username"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            name="email"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            name="password"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="confirm">Confirm Password:</label>
+                        <input
+                            type="password"
+                            id="confirm"
+                            value={passwordConf}
+                            name="passwordConf"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <button disabled={isFormInvalid() || submitting}>{submitting ? "Signing up..." : "Sign Up"}</button>
+                        <button type="button" onClick={() => navigate("/")}>Cancel</button>
+                    </div>
+
+                </form>
+
+            </div>
+
         </main>
     );
 
 }
-
 
 export default Signup;

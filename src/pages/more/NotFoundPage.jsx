@@ -1,32 +1,33 @@
-import React from "react";
 import { Link } from "react-router";
 import "../../styles/notFound.css";
-
 
 function NotFoundPage() {
 
     document.title = "404 | Not Found";
 
     return (
-        <main className="notFound">
+        <main className="not-found">
 
-            <div className="notFound-content">
+            <div className="pacman"></div>
 
-                <p className="notFound-code">404</p>
-                <h1>Challenge Not Found</h1>
-                <p> Looks like you've wandered off the map. This page doesn't exist, or it was defeated somewhere along the way.</p>
+            <div className="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-                <div className="notFound-actions">
-                    <Link to="/"> ← Back to Home </Link>
-                    <Link to="/challenges"> Explore Challenges → </Link>
-                </div>
+            <h1>404</h1>
+            <p>Oops! Pac-Man ate this page.</p>
 
+            <div className="notFound-actions">
+                <Link to="/"> ← Back to Homepage </Link>
+                <Link to="/challenges"> Explore Challenges → </Link>
             </div>
 
         </main>
     );
 
 }
-
 
 export default NotFoundPage;

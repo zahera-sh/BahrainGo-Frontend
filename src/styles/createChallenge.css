@@ -1,0 +1,192 @@
+.create-challenge-page {
+    min-height: 100vh;
+    padding: 70px 20px;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        #0b0b18;
+    background-size: 30px 30px;
+}
+
+.create-challenge-header {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.create-challenge-header>p:first-of-type {
+    margin: 15px 0 5px;
+    color: #f31919;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+}
+
+.create-challenge-header h1 {
+    margin: 10px 0;
+    color: #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: clamp(28px, 5vw, 46px);
+    text-transform: uppercase;
+}
+
+.create-challenge-subtitle {
+    color: #d8d8e8;
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+}
+
+.create-challenge-form {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 35px;
+    background: #17112f;
+    border: 3px solid #6c2cff;
+    box-shadow: 10px 10px 0 #000;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+    color: #ffe500;
+    font-family: "Silkscreen", monospace;
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #0b0b18;
+    border: 2px solid #6c2cff;
+    outline: none;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ffe500;
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #77758a;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.measurable-box {
+    margin-bottom: 25px;
+    padding: 18px;
+    background: #0b0b18;
+    border: 2px dashed #6c2cff;
+}
+
+.measurable-box label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: "Roboto Mono", monospace;
+    cursor: pointer;
+}
+
+.measurable-box input {
+    width: 20px;
+    height: 20px;
+    accent-color: #f31919;
+    cursor: pointer;
+}
+
+.goal-field {
+    animation: goalAppear 0.2s ease;
+}
+
+@keyframes goalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.special-field {
+    padding: 18px;
+    background: rgba(255, 229, 0, 0.04);
+    border: 2px solid #ffe500;
+}
+
+.special-field label {
+    color: #ffe500;
+}
+
+.business-field {
+    background: rgba(108, 44, 255, 0.08);
+    border-color: #6c2cff;
+}
+
+.form-group small {
+    margin-top: 8px;
+    color: #d8d8e8;
+    font-family: "Roboto Mono", monospace;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.create-challenge-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.create-challenge-actions .btn {
+    flex: 1;
+    padding: 16px;
+    border: 3px solid #fff;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.create-challenge-actions .btn-yellow {
+    background: #ffe500;
+    color: #17112f;
+}
+
+.create-challenge-actions .btn-danger {
+    background: #f31919;
+    color: #fff;
+}
+
+.create-challenge-actions .btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 #000;
+}

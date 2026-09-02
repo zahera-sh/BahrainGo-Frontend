@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap');
+
+.homepage {
+    min-height: 80vh;
+    background-color: #0b0b18;
+    color: #ffffff;
+    font-family: "Roboto Mono", monospace;
+}
+
+.hero {
+    min-height: 80vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.sky {
+    position: absolute;
+    inset: 0;
+    background-image: url("../assets/sky.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: skyMove 30s ease-in-out infinite alternate;
+    transform: scale(1);
+    z-index: 0;
+}
+
+.landscape {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55%;
+    background-image: url("../assets/landscape.png");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to bottom,
+            rgba(11, 11, 24, 0.05),
+            rgba(11, 11, 24, 0.2) 45%,
+            rgba(11, 11, 24, 0.85));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    margin-top: -30px;
+    padding: 40px 20px;
+    max-width: 900px;
+}
+
+.hero-content h1 {
+    margin: 0;
+    font-family: "Silkscreen", monospace;
+    font-size: clamp(45px, 8vw, 95px);
+    line-height: 1;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow:
+        5px 5px 0 #17112f,
+        9px 9px 0 #6c2cff;
+}
+
+.hero-content h1 span {
+    color: #f31919;
+}
+
+.hero-content p {
+    margin: 25px 0 35px;
+    font-family: "Roboto Mono", monospace;
+    font-size: clamp(14px, 2vw, 19px);
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 2px 2px 0 #17112f;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hero-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    box-sizing: border-box;
+    padding: 14px 20px;
+    font-family: "Silkscreen", monospace;
+    font-size: 12px;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #6c2cff;
+    border: 3px solid #ffffff;
+    box-shadow: 5px 5px 0 #17112f;
+    transition:
+        transform 0.1s,
+        box-shadow 0.1s,
+        background-color 0.1s;
+}
+
+.hero-actions a:hover {
+    background-color: #f31919;
+    transform: translate(3px, 3px);
+    box-shadow:
+        2px 2px 0 #17112f;
+}
+
+.hero-actions a:active {
+    transform: translate(5px, 5px);
+    box-shadow: none;
+}
+
+.hero::before {
+    content: "•   •   •   •   •   •   •";
+    position: absolute;
+    z-index: 3;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Silkscreen", monospace;
+    font-size: 10px;
+    letter-spacing: 8px;
+    color: #ffe500;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+@keyframes skyMove {
+    from {
+        background-position: 0 center;
+    }
+
+    to {
+        background-position: 100% center;
+    }
+}

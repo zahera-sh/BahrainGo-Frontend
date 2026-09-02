@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bitcount+Single:wght@100..900&family=Bonbon&family=Geomini:wght@200..800&family=Honk:MORF@15&family=Londrina+Shadow&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Slab:wght@100..900&family=Silkscreen:wght@400;700&family=Special+Elite&display=swap');
+
+body {
+    margin: 0;
+    background-color: #0b0b18;
+}
+
+nav,
+footer {
+    font-family: "Roboto Mono", monospace;
+}
+
+nav {
+    width: 100%;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    background-color: #0b0b18;
+    border-bottom: 3px solid #6c2cff;
+    box-shadow: 0 4px 0 #17112f;
+    position: relative;
+    z-index: 10;
+}
+
+.nav-logo {
+    margin-right: auto;
+    font-family: "Silkscreen", monospace;
+    font-size: 22px;
+    text-decoration: none;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 3px 3px 0 #17112f;
+    cursor: none;
+}
+
+.nav-logo .bahrain {
+    color: #f31919;
+}
+
+.nav-logo .go {
+    color: #ffffff;
+}
+
+nav a {
+    font-family: "Silkscreen", monospace;
+    font-size: 13px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 12px;
+    border: 2px solid transparent;
+    transition:
+        color 0.1s,
+        background-color 0.1s,
+        transform 0.1s;
+}
+
+nav a:hover {
+    color: #ffe500;
+    background-color: #17112f;
+    border-color: #6c2cff;
+    transform: translateY(-2px);
+}
+
+nav button {
+    font-family: "Silkscreen", monospace;
+    font-size: 13px;
+    color: #ffffff;
+    background-color: #6c2cff;
+    border: 2px solid #ffffff;
+    padding: 11px 14px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #17112f;
+    transition:
+        transform 0.1s,
+        box-shadow 0.1s,
+        background-color 0.1s;
+}
+
+nav button:hover {
+    background-color: #f31919;
+    transform: translateY(-2px);
+    box-shadow: 2px 2px 0 #17112f;
+}
+
+nav button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+footer {
+    width: 100%;
+    min-height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 40px;
+    background-color: #0b0b18;
+    border-top: 3px solid #6c2cff;
+    color: #d8d8e8;
+    position: relative;
+    margin-top: 0;
+}
+
+.footerlinks {
+    display: flex;
+    gap: 25px;
+}
+
+.footerlinks a {
+    font-family: "Roboto Mono", monospace;
+    font-size: 13px;
+    color: #d8d8e8;
+    text-decoration: none;
+    transition:
+        color 0.1s,
+        transform 0.1s;
+}
+
+.footerlinks a:hover {
+    color: #ffe500;
+    transform: translateY(-2px);
+}
+
+.footercopyright p {
+    margin: 0;
+    font-family: "Roboto Mono", monospace;
+    font-size: 12px;
+    color: #77778c;
+    cursor: none;
+}
+
+footer::after {
+    content: "•  •  •  •  •";
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Silkscreen", monospace;
+    font-size: 8px;
+    letter-spacing: 7px;
+    color: #6c2cff;
+    opacity: 0.45;
+}

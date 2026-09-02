@@ -5,11 +5,11 @@ import { ProgressBar, LineWave } from 'react-loader-spinner';
 import { getChallengeById, deleteChallenge } from "../../services/challengeService";
 import { createInvite, dropChallenge } from "../../services/inviteSrvice";
 import { getParticipants, joinChallenge, updateProgress } from "../../services/participantService";
-
+import "../../styles/challengeDetails.css";
 
 function ChallengeDetailsPage() {
 
-    document.title = `Challenge`;
+    document.title = `Challenge Details`;
 
     const [challenge, setChallenge] = useState(null);
     const [invitee, setInvitee] = useState("");
@@ -25,26 +25,33 @@ function ChallengeDetailsPage() {
     const navigate = useNavigate();
 
     const isParticipant = participants.some(
-        (participant) => participant.userId._id === user._id
+        (participant) => participant.userId?._id === user?._id
     );
 
     const myParticipant = participants.find(
-        (participant) => participant.userId._id === user._id
+        (participant) => participant.userId?._id === user?._id
     );
 
     useEffect(() => {
 
-        async function loadChallenge() {
+        async function loadData() {
 
             try {
                 setLoading(true);
-                const response = await getChallengeById(id);
-                setChallenge(response);
+                setError(null);
+
+                const challengeResponse = await getChallengeById(id);
+                setChallenge(challengeResponse);
+
+                const participantsResponse = await getParticipants(id);
+                setParticipants(participantsResponse);
             }
 
             catch (err) {
                 console.error("Failed to load challenge", err);
-                setError(err.response?.data?.message || "Failed to load challenge. Please try again shortly.");
+                setError(
+                    err.response?.data?.message || "Failed to load challenge. Please try again shortly."
+                );
             }
 
             finally {
@@ -53,27 +60,7 @@ function ChallengeDetailsPage() {
 
         }
 
-        async function loadParticipants() {
-
-            try {
-                setLoading(true);
-                const response = await getParticipants(id);
-                setParticipants(response);
-            }
-
-            catch (err) {
-                console.error("Failed to load Participants", err);
-                setError(err.response?.data?.message || "Failed to load Participants. Please try again shortly.");
-            }
-
-            finally {
-                setLoading(false);
-            }
-
-        }
-
-        loadChallenge();
-        loadParticipants();
+        loadData();
 
     }, [id]);
 
@@ -192,220 +179,267 @@ function ChallengeDetailsPage() {
 
     }
 
-    if (loading) {
-        return <div className="loading">
-            <LineWave
-                visible={true}
-                height="150"
-                width="150"
-                color="red"
-                ariaLabel="line-wave-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                firstLineColor=""
-                middleLineColor=""
-                lastLineColor=""
-            />
-        </div>
+    if (loading || !challenge) {
+        return (
+            <main className="challenge-loading">
+                <LineWave visible={true} height="150" width="150" color="#f31919" ariaLabel="line-wave-loading" />
+                <p>LOADING CHALLENGE...</p>
+            </main>
+        )
     }
 
     if (error) {
-        return <div className="err">{error}</div>;
+        return (
+            <main className="challenge-error">
+                <div className="error-card">
+                    <span className="error-code">ERROR</span>
+                    <h1>Something went wrong!</h1>
+                    <p>{error}</p>
+                    <Link to="/challenges"> ← Back to Challenges </Link>
+                </div>
+            </main>
+        )
     }
 
+    const progressPercentage =
+        challenge?.isMeasurable && myParticipant
+            ? Math.min(
+                (myParticipant.progress / challenge.goal) * 100, 100)
+            : 0
 
     return (
-        <main>
+        <main className="challenge-page">
 
-            <p>{challenge.isPublic == true
-                ? " Public Challenge"
-                : " Private Challenge"}</p>
-
-            <p>{challenge.status}</p>
-            <h2>{challenge.description}</h2>
-            <p>{challenge.type}</p>
-
-            <p>Goal:
-                {challenge.isMeasurable == true
-                    ? ` ${challenge.goal}`
-                    : " Complete Challenge"}
-            </p>
-
-            <p>Reward: {challenge.reward}xp</p>
-
-            <p>{challenge.creator.role == "business"
-                ? `Extra Reward: ${challenge.businessReward}`
-                : " "}
-            </p>
-
-            <p>Start: {new Date(challenge.startTime).toLocaleString("en-GB", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "numeric",
-                minute: "2-digit"
-            })}</p>
-
-            <p>End: {new Date(challenge.endTime).toLocaleString("en-GB", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "numeric",
-                minute: "2-digit"
-            })}</p>
-
-            <p>Challenged by: {challenge.creator.username} [
-                {challenge.creator.role == "admin" || challenge.creator.role == "business"
-                    ? challenge.creator.role
-                    : `${challenge.creator.points}xp`}]
-            </p>
+            <section className="challenge-hero">
+                <div className="challenge-badges">
+                    <span className={challenge.isPublic
+                        ? "badge public"
+                        : "badge private"} >
+                        {challenge.isPublic
+                            ? "● PUBLIC"
+                            : "● PRIVATE"}
+                    </span>
+                    <span className="badge status">{challenge.status}</span>
+                </div>
+                <h1>{challenge.description}</h1>
+                <p className="challenge-type"> {challenge.type} </p>
+            </section>
 
 
+            <section className="challenge-info">
+                <div className="info-card">
+                    <span className="info-label">GOAL</span>
+                    <strong>
+                        {challenge?.isMeasurable
+                            ? challenge.goal
+                            : "COMPLETE"}
+                    </strong>
+                </div>
+                <div className="info-card">
+                    <span className="info-label">REWARD</span>
+                    <strong> ⭐ {challenge.reward} XP </strong>
+                </div>
+                {challenge.creator.role === "business" && (
+                    <div className="info-card special-reward">
+                        <span className="info-label"> BUSINESS REWARD </span>
+                        <strong> 🎁 {challenge.businessReward} </strong>
+                    </div>)}
+                <div className="info-card">
+                    <span className="info-label">START</span>
+                    <strong>
+                        {new Date(challenge.startTime).toLocaleString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit"
+                        })}
+                    </strong>
+                </div>
+                <div className="info-card">
+                    <span className="info-label">END</span>
+                    <strong>
+                        {new Date(challenge.endTime).toLocaleString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit"
+                        })} </strong>
+                </div>
+            </section>
 
-            {challenge.creator._id === user._id && !challenge.isPublic && (
+
+            <section className="creator-card">
                 <div>
-                    <button onClick={() => setShowInvite(!showInvite)}>Invite More People</button>
-
-                    {showInvite && (
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Enter user ID"
-                                value={invitee}
-                                onChange={(event) => setInvitee(event.target.value)}
-                            />
-                            <button onClick={handleInvite}>Send</button>
-                        </div>
+                    <span className="section-label"> CHALLENGE CREATOR </span>
+                    <h2> {challenge.creator.username} </h2>
+                </div>
+                <div className="creator-info">
+                    <span> {challenge.creator.role} </span>
+                    {challenge.creator.role === "user" && (
+                        <span> {challenge.creator.points} XP </span>
                     )}
                 </div>
-            )}
+            </section>
 
 
             {challenge.creator._id === user._id && (
-                <button onClick={handleDeleteChallenge}>🗑️ Delete Challenge</button>
+                <section className="challenge-actions">
+                    {!challenge.isPublic && (
+                        <div className="invite-section">
+                            <button className="btn btn-yellow" onClick={() => setShowInvite(!showInvite)} >
+                                {showInvite
+                                    ? "✕ Close Invite"
+                                    : "👥 Invite People"}
+                            </button>
+                            {showInvite && (<div className="invite-box">
+                                <input
+                                    type="text"
+                                    placeholder="Enter username"
+                                    value={invitee}
+                                    onChange={(event) => setInvitee(event.target.value)} />
+                                <button className="btn btn-purple" onClick={handleInvite} > Send Invite → </button>\
+                            </div>
+                            )}
+                        </div>
+                    )}
+                    <button className="btn btn-danger" onClick={handleDeleteChallenge} > 🗑 Delete Challenge </button>
+                </section>
             )}
 
-            {error && <p className="err">Error: {error}</p>}
 
-
-
-            {challenge.isPublic &&
-                challenge.creator._id !== user._id &&
-                !isParticipant && (
-                    <button onClick={handleJoin}> Join</button>
-                )}
-
-            {error && <p className="err">Error: {error}</p>}
-
-
+            {challenge.isPublic && challenge.creator._id !== user._id && !isParticipant && (
+                <section className="join-section">
+                    <p> Ready to take on this challenge? </p>
+                    <button className="btn btn-yellow join-button" onClick={handleJoin} > ⚡ JOIN CHALLENGE </button>
+                </section>
+            )}
 
             {myParticipant && !myParticipant.isComplete && (
-                <div className="update-panel">
+                <section className="progress-panel">
+                    <div className="panel-header">
+                        <div>
+                            <span className="section-label">YOUR PROGRESS</span>
+                            <h2> Keep Going! </h2>
+                        </div>
+                        <span className="progress-number">
 
-                    <h2>Update Your Progress</h2>
+                            {myParticipant.progress} {challenge?.isMeasurable && ` / ${challenge.goal}`} </span>
+                    </div>
+                    {challenge?.isMeasurable && (
+                        <div className="progress-track">
+                            <div className="progress-fill" style={{ width: `${progressPercentage}%` }} />
+                        </div>
+                    )}
+                    <div className="progress-form">
+                        <input type="number"
+                            min="1"
+                            placeholder="Add progress"
+                            value={progress}
+                            onChange={(event) => setProgress(event.target.value)}
+                        />
 
-                    <p>Current Progress: {myParticipant.progress} / {challenge.goal}</p>
+                        <input
 
-                    <input
-                        type="number"
-                        min="1"
-                        placeholder="Add to your progress"
-                        value={progress}
-                        onChange={(event) => setProgress(event.target.value)}
-                    />
+                            type="text"
+                            placeholder="Add a comment..."
+                            value={comment}
+                            onChange={(event) => setComment(event.target.value)}
+                        />
 
-                    <input
-                        type="text"
-                        placeholder="Add a comment..."
-                        value={comment}
-                        onChange={(event) => setComment(event.target.value)}
-                    />
-
-                    <button onClick={handleUpdateProgress}> ➕ Update Progress</button>
-
-                    <button onClick={handleDropChallenge}>Drop Challenge </button>
-
-                </div>
+                        <button className="btn btn-purple" onClick={handleUpdateProgress} > ➕ Update Progress </button>
+                    </div>
+                    <button className="drop-button" onClick={handleDropChallenge} > Drop Challenge </button>
+                </section>
             )}
 
 
-            <Link to={`/challenges/${id}/report`}>⚠️</Link>
+            <section className="participants-section">
+                <div className="participants-header"><div>
+                    <span className="section-label"> THE PLAYERS </span>
+                    <h2>Current Participants</h2>
+                </div>
+                    <span className="participant-count">
+                        {participants.length}
+                    </span>
+                </div>
+                <div className="participants-grid">
+                    {participants.length > 0
+                        ? (participants.map((participant) => (
+                            <div key={participant._id} className={participant.isComplete
+                                ? "participant-card complete"
+                                : "participant-card"} >
+                                <button className="participant-name" onClick={() => setSelectedParticipant(participant)} >
+                                    {participant.userId.username}
+                                </button>
+                                {participant.isComplete
+                                    ? (<span className="complete-badge"> ✓ COMPLETE </span>)
+                                    : (<p> Progress:{" "}
+                                        <strong> {participant.progress} </strong>
+                                        {challenge?.isMeasurable && ` / ${challenge.goal}`}
+                                    </p>)}
+                            </div>
+                        )))
+                        : (
+                            <div className="no-participants">
+                                <p>👻 No participants yet.</p>
+                                <span> Be the first to take on the challenge! </span>
+                            </div>)}
+                </div>
+            </section>
 
 
-            <div className="participants">
-
-                <h2>Current Participants</h2>
-
-                {participants.map((participant) => (
-
-                    <div key={participant._id} className="participant">
-
-                        <button
-                            className="participant-name"
-                            onClick={() => setSelectedParticipant(participant)}
-                        > {participant.userId.username}</button>
-
-                        <p>{participant.isComplete
-                            ? "✅ Completed"
-                            : `Progress: ${participant.progress} / ${challenge.goal}`
-                        }</p>
-
-                    </div>
-
-                ))}
-
+            <div className="report-section">
+                <Link to={`/challenges/${id}/report`} className="report-link" > ⚠ Report Challenge </Link>
             </div>
 
 
-
             {selectedParticipant && (
-                <div className="participant-bubble">
-
-                    <button
-                        className="close-button"
-                        onClick={() => setSelectedParticipant(null)}
-                    >
-                        Show Less
-                    </button>
-
-                    <h2>{selectedParticipant.userId.username}</h2>
-
-                    <p>Progress: {selectedParticipant.progress} / {challenge.goal}</p>
-
-                    {selectedParticipant.isComplete && (
-                        <p>✅ Completed at{" "}
-                            {new Date(selectedParticipant.completeAt).toLocaleString("en-GB", {
+                <div className="participant-overlay">
+                    <section className="participant-modal">
+                        <button className="close-button" onClick={() => setSelectedParticipant(null)} > ✕ </button>
+                        <span className="section-label"> PLAYER PROFILE </span>
+                        <h2> {selectedParticipant.userId.username} </h2>
+                        <div className="modal-progress">
+                            <p>Progress</p>
+                            <strong> {selectedParticipant.progress} {challenge?.isMeasurable && ` / ${challenge.goal}`} </strong>
+                        </div>
+                        {selectedParticipant.isComplete && (
+                            <p className="completion-time"> ✓ Completed at{" "} {new Date(selectedParticipant.completeAt).toLocaleString("en-GB", {
                                 day: "numeric",
                                 month: "long",
                                 year: "numeric",
                                 hour: "numeric",
                                 minute: "2-digit"
                             })}
-                        </p>
-                    )}
-
-                    <h3>Progress Log</h3>
-
-                    {selectedParticipant.logs?.length > 0 ? (
-                        selectedParticipant.logs.map((log) => (
-                            <div key={log._id} className="progress-log">
-                                <p>{log.comment}</p>
-                                {new Date(log.createdAt).toLocaleString("en-GB", {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                    hour: "numeric",
-                                    minute: "2-digit"
-                                })}
-                            </div>
-                        ))
-                    ) : (
-                        <p>No updates yet.</p>
-                    )}
-
+                            </p>
+                        )}
+                        <h3>Progress Log</h3>
+                        <div className="progress-logs">
+                            {selectedParticipant.logs?.length > 0
+                                ? (selectedParticipant.logs.map((log) => (
+                                    <div key={log._id} className="progress-log" >
+                                        <p> {log.comment || "Progress updated."} </p>
+                                        <span>
+                                            {new Date(log.createdAt).toLocaleString("en-GB", {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
+                                                hour: "numeric",
+                                                minute: "2-digit"
+                                            })}
+                                        </span>
+                                    </div>
+                                )))
+                                : (
+                                    <p className="no-logs"> No updates yet. </p>
+                                )}
+                        </div>
+                    </section>
                 </div>
             )}
-
+            
         </main>
     );
 
