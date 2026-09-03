@@ -35,7 +35,13 @@ function CreateChallengePage() {
 
         const createdChallenge = await createChallenge(formData);
 
-        navigate(`/dashboard`);
+        if (user.role === "admin") {
+            navigate("/admin");
+        }
+
+        else {
+            navigate("/dashboard");
+        }
     }
 
 
